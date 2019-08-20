@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class TicketTypesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

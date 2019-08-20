@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     //[Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
@@ -17,17 +18,28 @@ namespace Spock_BugTracker.Controllers
         // GET: Admin
         public ActionResult UserIndex()
         {
-            var users = db.Users.Select(u => new UserProfileViewModel
+            var roles = db.Roles.ToList();
+            var projects = db.Projects;
+            var users = db.Users.Select(u => new UserIndexViewModel
             {
                 Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                DisplayName = u.DisplayName,
-                AvatarUrl = u.AvatarUrl,
-                Email = u.Email
+                FullName = u.LastName + ", " + u.FirstName,
+                Email = u.Email,
+                AvatarUrl = u.AvatarUrl
             }).ToList();
 
+            foreach(var user in users)
+            {
+                user.CurrentRole = new SelectList(roles, "Name", "Name", roleHelper.ListUserRoles(user.Id).FirstOrDefault());
+                user.CurrentProjects = new MultiSelectList(projects, "Id", "Name", projectHelper.ListUserProjects(user.Id).Select(p => p.Id));
+            }
+   
             return View(users);
+        }
+
+        public ActionResult RolesIndex()
+        {
+            return View();
         }
 
         public ActionResult ManageUserRole(string userId)
@@ -101,7 +113,7 @@ namespace Spock_BugTracker.Controllers
         public ActionResult ManageUserProjects(string userId)
         {           
             var myProjects = projectHelper.ListUserProjects(userId).Select(p => p.Id);
-            ViewBag.Projects = new MultiSelectList(db.Projects.ToList(), "Id", "Name", myProjects);
+            ViewBag.Projects = new MultiSelectList(db.Projects, "Id", "Name", myProjects);
             return View();
         }
 

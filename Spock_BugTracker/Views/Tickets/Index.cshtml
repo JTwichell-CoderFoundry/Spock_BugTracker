@@ -4,124 +4,95 @@
     ViewBag.Title = "Index";
 }
 
-@foreach (var ticket in Model)
-{
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table searchTbl">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Developer")
+            </th>
+            <th>
+                @Html.DisplayName("Submitter")
+            </th>
+            <th>
+                @Html.DisplayName("Project")
+            </th>
+            <th>
+                @Html.DisplayName("Priority")
+            </th>
+            <th>
+                @Html.DisplayName("Status")
+            </th>
+            <th>
+                @Html.DisplayName("Type")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>            
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssignedToUser.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerUser.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TicketType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>               
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <br />
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) <br />
+                    @Html.ActionLink("Dashboard", "Dashboard", new { id = item.Id }) <br />
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+@section scripts{
+    <script>
+        var msg = '@TempData["Message"]';
+        if(msg != "")
+        {
+            Swal.fire({
+              type: 'error',
+              title: 'Oops...',
+              text: msg            
+            })
+        }
+    </script>    
     
-        <!-- Start Ticket -->
-        <div class="ticket-wrapper">
-            <table class="ticket-table">
-
-                <tr>
-                    <td class="first-col">
-                        <!-- title -->
-                        <div class="ticket-name-div">
-                            <span class="ticket-event-longtitle">@ticket.Title</span>
-                        </div>
-                        <!-- /.ticket-name-div -->
-                        <!-- venue details start -->
-                        <div class="ticket-event-details">
-                            <table>
-                                <tr>
-                                    <td class="first-col">
-                                        <div class="ticket-info">
-                                            Created on @ticket.Created.ToString("MMM d, yyyy")
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                        <div class="ticket-title">
-                                            TIME
-                                        </div>
-                                        <!-- /.ticket-title -->
-                                        <div class="ticket-info">
-                                            @ticket.Created.TimeOfDay
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                    </td>
-                                    <!-- /.first-col -->
-                                    <td class="second-col">
-                                        <div class="ticket-venue">
-                                            Place's name
-                                        </div>
-                                        <!-- /.ticket-venue -->
-                                        <div class="ticket-venue">
-                                            Street
-                                        </div>
-                                        <!-- /.ticket-venue -->
-                                        <div class="ticket-venue">
-                                            City, State
-                                        </div>
-                                        <!-- /.ticket-venue -->
-                                    </td>
-                                    <!-- /.second-col -->
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- /.ticket-event-details -->
-                        <!-- ticket details start -->
-                        <div class="ticket-ticket-details">
-                            <table>
-                                <tr>
-                                    <td class="first-col">
-                                        <div class="ticket-title">
-                                            TICKET #
-                                        </div>
-                                        <!-- /.ticket-title -->
-                                        <div class="ticket-info">
-                                            @ticket.Id
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                        <div class="ticket-title">
-                                            PRICE
-                                        </div>
-                                        <!-- /.ticket-title -->
-                                        <div class="ticket-info">
-                                            $00.00
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                    </td>
-                                    <!-- /.first-col -->
-                                    <td class="second-col">
-                                        <div class="ticket-title">
-                                            TICKET OWNER
-                                        </div>
-                                        <!-- /.ticket-title -->
-                                        <div class="ticket-info">
-                                            @ticket.OwnerUser.FullName
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                        <div class="ticket-title">
-                                            TICKET DEVELOPER
-                                        </div>
-                                        <!-- /.ticket-title -->
-                                        <div class="ticket-info">
-                                            @ticket.AssignedToUser.FullName
-                                        </div>
-                                        <!-- /.ticket-info -->
-                                    </td>
-                                    <!-- /.second-col -->
-                                    <td class="third-col">
-                                        <a href="#" target="_blank">
-                                            <img class="ticket-qr-code" src='http://placehold.it/100x100?text=QR+Code' alt="qrcode" />
-                                        </a>
-                                    </td>
-                                    <!-- /.third-col -->
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- /.ticket-ticket-details -->
-                    </td>
-                    <!-- /.first-col -->
-                    <td class="ticket-logo">
-                        <img src="http://placehold.it/40x190?text=Logo" alt="Logo" />
-                    </td>
-                    <!-- /.ticket-logo -->
-                </tr>
-              
-            </table>
-            <!-- /.ticket-table -->
-        </div>
-        <!-- /.ticket-wrapper -->
-        <!-- End Ticket -->
-
-    <br />
 }
-

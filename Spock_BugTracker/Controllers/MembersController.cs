@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Spock_BugTracker.Helpers;
 using Spock_BugTracker.Models;
 using Spock_BugTracker.ViewModels;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class MembersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

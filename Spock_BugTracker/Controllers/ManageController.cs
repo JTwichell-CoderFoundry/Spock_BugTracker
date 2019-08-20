@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : Controller
     {
@@ -386,4 +387,6 @@ namespace Spock_BugTracker.Controllers
 
         #endregion Helpers
     }
+
+
 }

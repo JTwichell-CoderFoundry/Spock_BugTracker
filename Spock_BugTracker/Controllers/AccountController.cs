@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Spock_BugTracker.Helpers;
 using Spock_BugTracker.Models;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class AccountController : Controller
     {
@@ -58,6 +60,26 @@ namespace Spock_BugTracker.Controllers
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DemoLoginAsync(string demoEmail)
+        {
+            var email = WebConfigurationManager.AppSettings[demoEmail];
+            var password = WebConfigurationManager.AppSettings["DemoUserPassword"];
+
+            var result = await SignInManager.PasswordSignInAsync(email, password, false, shouldLockout: false);
+
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Dashboard", "Home");
+                case SignInStatus.Failure:
+                default:
+                    return RedirectToAction("Login", "Home");
+            }
         }
 
         //
@@ -254,7 +276,22 @@ namespace Spock_BugTracker.Controllers
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
+
             return code == null ? View("Error") : View();
+        }
+
+        [Authorize]
+        public async Task<ActionResult> CustomPasswordResetAsync()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            var vm = new ResetPasswordViewModel
+            {
+                Code = await UserManager.GeneratePasswordResetTokenAsync(userId),
+                Email = user.Email
+            };
+            return View("ResetPassword", vm);
         }
 
         //

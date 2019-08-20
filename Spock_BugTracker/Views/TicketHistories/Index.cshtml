@@ -10,13 +10,7 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Ticket.OwnerUserId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
+    <tr>      
         <th>
             @Html.DisplayNameFor(model => model.PropertyName)
         </th>
@@ -33,13 +27,7 @@
     </tr>
 
     @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ticket.OwnerUserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
+    <tr>      
         <td>
             @Html.DisplayFor(modelItem => item.PropertyName)
         </td>

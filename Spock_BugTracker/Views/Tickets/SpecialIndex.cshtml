@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Spock_BugTracker.ViewModels.TicketViewModel>
+
+@{
+    ViewBag.Title = "SpecialIndex";
+}
+
+<h2>SpecialIndex</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayName("Current Priority")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var ticket in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => ticket.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => ticket.Created)
+        </td>
+        <td>
+            @Html.DropDownList("CurrentPriority", ticket.CurrentPriority)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=ticket.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=ticket.Id })
+       
+        </td>
+    </tr>
+}
+
+</table>

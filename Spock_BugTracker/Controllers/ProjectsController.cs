@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -31,7 +32,6 @@ namespace Spock_BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-
 
             //Give my details view a MultiSelectList of available PM's
             //KEEP AN EYE OUT FOR 'MAGIC STRINGS' THROUGHOUT YOUR APPLICATION...
@@ -113,11 +113,14 @@ namespace Spock_BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Project project = db.Projects.Find(id);
+
             if (project == null)
             {
                 return HttpNotFound();
             }
+
             return View(project);
         }
 

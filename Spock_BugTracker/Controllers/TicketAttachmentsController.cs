@@ -1,11 +1,17 @@
-﻿using Spock_BugTracker.Models;
+﻿using Microsoft.AspNet.Identity;
+using Spock_BugTracker.Helpers;
+using Spock_BugTracker.Models;
+using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class TicketAttachmentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -32,30 +38,32 @@ namespace Spock_BugTracker.Controllers
             return View(ticketAttachment);
         }
 
-        // GET: TicketAttachments/Create
-        public ActionResult Create()
-        {
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "OwnerUserId");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
-            return View();
-        }
-
         // POST: TicketAttachments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,TicketId,UserId,Title,Description,AttachmentUrl,Created")] TicketAttachment ticketAttachment)
+        public ActionResult Create([Bind(Include="TicketId")] TicketAttachment ticketAttachment, string attachmentTitle, string attachmentDescription, HttpPostedFileBase attachment)
         {
             if (ModelState.IsValid)
             {
+                ticketAttachment.Title = attachmentTitle;
+                ticketAttachment.Description = attachmentDescription;
+                ticketAttachment.Created = DateTime.Now;
+                ticketAttachment.UserId = User.Identity.GetUserId();
+
+                if (ImageHelpers.IsValidAttachment(attachment))
+                {
+                    var fileName = Path.GetFileName(attachment.FileName);
+                    attachment.SaveAs(Path.Combine(Server.MapPath("~/Attachments/"), fileName));
+                    ticketAttachment.AttachmentUrl = "/Attachments/" + fileName;
+                }
+                
                 db.TicketAttachments.Add(ticketAttachment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.TicketId = new SelectList(db.Tickets, "Id", "OwnerUserId", ticketAttachment.TicketId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttachment.UserId);
+          
             return View(ticketAttachment);
         }
 

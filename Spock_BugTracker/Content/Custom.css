@@ -1,0 +1,4 @@
+﻿select:-internal-list-box option:checked {
+    background-color: yellow;
+    color: black;
+}

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Spock_BugTracker.Helpers
 {
-    public class SeedHelper
+    public class SeedHelper : CommonHelper
     {
         //public static List<ApplicationUserManager> GenerateUsers()
         //{

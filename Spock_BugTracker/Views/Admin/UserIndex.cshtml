@@ -1,60 +1,66 @@
 ﻿@using Spock_BugTracker.ViewModels
 @using Spock_BugTracker.Helpers
 
-@model IEnumerable<UserProfileViewModel>
-
-<style>
-    .avatar {
-        max-height: 30px;
-        max-width: 30px;
-    }
-</style>
-
-@{
-    var roleHelper = new UserRolesHelper();
-}
+@model IEnumerable<UserIndexViewModel>
 
 <h2>User Index</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayName("Avatar")
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayName("Full Name")
-        </th>
-        <th>
-            @Html.DisplayName("Role")
-        </th>
+<table class="table tblTarget">
 
-        <th></th>
-    </tr>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AvatarUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayName("Current Role")
+            </th>
+            <th>
+                @Html.DisplayName("Current Project(s)")
+            </th>
 
-    @foreach (var user in Model)
-    {
-    <tr>
-        <td class="avatar">
-            <img src="@user.AvatarUrl" class="img-responsive" />
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => user.Email)
-        </td>
-        <td>
-            @user.LastName, @user.FirstName
-        </td>
-        <td>
-            @roleHelper.ListUserRoles(user.Id).FirstOrDefault()
-        </td>
-        <td>
+            @*<th></th>*@
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>
+                <img src="@user.AvatarUrl" height="20" width="20" />
+            </td>
+            <td>
+                @Html.DisplayFor(model => user.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => user.Email)
+            </td>
+            <td>
+                @Html.DropDownList("CurrentRole", user.CurrentRole, "NONE")
+            </td>
+
+            <td>
+                @Html.ListBox("CurrentProjects", user.CurrentProjects)
+            </td>
+
+            @*<td>
             @Html.ActionLink("Manage Role", "ManageUserRole", "Admin", new { userId = user.Id }, null) |
             @Html.ActionLink("Manage Projects", "ManageUserProjects", "Admin", new { userId = user.Id }, null)
-        </td>
-    </tr>
-    }
+        </td>*@
+        </tr>
+        }
+    </tbody>
+
 </table>
+
+
+
 
 @Html.ActionLink("Back To Dashboard", "Dashboard", "Home")

@@ -1,23 +1,28 @@
-﻿@using Spock_BugTracker.Models
+﻿@using Spock_BugTracker.Helpers
+@using Spock_BugTracker.Models
 @using Microsoft.AspNet.Identity
+
+@{
+    var navHelper = new NavHelper();
+}
 
 <!doctype html>
 <html class="fixed">
 <head>
 
-    @{
-        var userId = User.Identity.GetUserId();
-        var db = new ApplicationDbContext();
-        var user = db.Users.Find(userId);
-    }
-
     <!-- Basic -->
     <meta charset="UTF-8">
 
-    <title>Dashboard | JSOFT Themes | JSOFT-Admin</title>
+    <title>Issue Tracker</title>
+
     <meta name="keywords" content="MVC C# BugTracker" />
     <meta name="description" content="Spock BugTracker">
     <meta name="author" content="Jason Twichell">
+
+    <meta property="og:title" content="Issue Tracker">
+    <meta property="og:description" content="An application to track software bugs">
+    <meta property="og:image" content="https://localhost:44361/images/dtBugTrackerImage.png">
+    <meta property="og:url" content="https://dt-bugtracker.azurewebsites.net">
 
     <!-- Mobile Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -45,11 +50,19 @@
     <!-- Theme Custom CSS -->
     <link rel="stylesheet" href="~/assets/stylesheets/theme-custom.css">
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+
     <!-- Head Libs -->
     <script src="~/assets/vendor/modernizr/modernizr.js"></script>
 
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+
+
     @*Tickets Index*@
     <link href="~/Content/Ticket.css" rel="stylesheet" />
+
+    <link href="~/Content/Custom.css" rel="stylesheet" />
+
 </head>
 <body>
     <section class="body">
@@ -82,107 +95,60 @@
                 <ul class="notifications">
                     <li>
                         <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
-                            <i class="fa fa-tasks"></i>
-                            <span class="badge">3</span>
-                        </a>
-
-                        <div class="dropdown-menu notification-menu large">
-                            <div class="notification-title">
-                                <span class="pull-right label label-default">3</span>
-                                Tasks
-                            </div>
-
-                            <div class="content">
-                                <ul>
-                                    <li>
-                                        <p class="clearfix mb-xs">
-                                            <span class="message pull-left">Generating Sales Report</span>
-                                            <span class="message pull-right text-dark">60%</span>
-                                        </p>
-                                        <div class="progress progress-xs light">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="clearfix mb-xs">
-                                            <span class="message pull-left">Importing Contacts</span>
-                                            <span class="message pull-right text-dark">98%</span>
-                                        </p>
-                                        <div class="progress progress-xs light">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" style="width: 98%;"></div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="clearfix mb-xs">
-                                            <span class="message pull-left">Uploading something big</span>
-                                            <span class="message pull-right text-dark">33%</span>
-                                        </p>
-                                        <div class="progress progress-xs light mb-xs">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;"></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
                             <i class="fa fa-envelope"></i>
-                            <span class="badge">4</span>
+                            <span class="badge">@*@NotificationHelper.GetNewUserNotificationCount()*@</span>
                         </a>
 
                         <div class="dropdown-menu notification-menu">
                             <div class="notification-title">
-                                <span class="pull-right label label-default">230</span>
-                                Messages
+                                <span class="pull-right label label-default">@*@NotificationHelper.GetAllUserNotificationCount()*@</span>
+                                Notifications
                             </div>
 
                             <div class="content">
                                 <ul>
-                                    <li>
-                                        <a href="#" class="clearfix">
-                                            <figure class="image">
-                                                <img src="~/assets/images/!sample-user.jpg" alt="Joseph Doe Junior" class="img-circle" />
-                                            </figure>
-                                            <span class="title">Joseph Doe</span>
-                                            <span class="message">Lorem ipsum dolor sit.</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="clearfix">
-                                            <figure class="image">
-                                                <img src="~/assets/images/!sample-user.jpg" alt="Joseph Junior" class="img-circle" />
-                                            </figure>
-                                            <span class="title">Joseph Junior</span>
-                                            <span class="message truncate">Truncated message. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacinia orci. Proin vestibulum eget risus non luctus. Nunc cursus lacinia lacinia. Nulla molestie malesuada est ac tincidunt. Quisque eget convallis diam, nec venenatis risus. Vestibulum blandit faucibus est et malesuada. Sed interdum cursus dui nec venenatis. Pellentesque non nisi lobortis, rutrum eros ut, convallis nisi. Sed tellus turpis, dignissim sit amet tristique quis, pretium id est. Sed aliquam diam diam, sit amet faucibus tellus ultricies eu. Aliquam lacinia nibh a metus bibendum, eu commodo eros commodo. Sed commodo molestie elit, a molestie lacus porttitor id. Donec facilisis varius sapien, ac fringilla velit porttitor et. Nam tincidunt gravida dui, sed pharetra odio pharetra nec. Duis consectetur venenatis pharetra. Vestibulum egestas nisi quis elementum elementum.</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="clearfix">
-                                            <figure class="image">
-                                                <img src="~/assets/images/!sample-user.jpg" alt="Joe Junior" class="img-circle" />
-                                            </figure>
-                                            <span class="title">Joe Junior</span>
-                                            <span class="message">Lorem ipsum dolor sit.</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="clearfix">
-                                            <figure class="image">
-                                                <img src="~/assets/images/!sample-user.jpg" alt="Joseph Junior" class="img-circle" />
-                                            </figure>
-                                            <span class="title">Joseph Junior</span>
-                                            <span class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacinia orci. Proin vestibulum eget risus non luctus. Nunc cursus lacinia lacinia. Nulla molestie malesuada est ac tincidunt. Quisque eget convallis diam.</span>
-                                        </a>
-                                    </li>
+                                    @*@foreach (var notification in NotificationHelper.GetUnreadUserNotifications().ToList())
+                                        {
+                                            <li>
+                                                <hr size=3 />
+
+                                                @using (Html.BeginForm("MarkAsRead", "TicketNotifications"))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.Hidden("Id", notification.Id)
+
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <figure class="image">
+                                                                <img src="@notification.Sender.AvatarUrl" alt="@notification.Sender.Email" class="img-circle" width="25" />
+                                                            </figure>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <span class="title">@notification.Subject</span>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <span class="message text-justify"><b>@notification.NotificationBody</b></span>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-md-12 text-center">
+                                                            <button type="submit" class="btn btn-sm btn-primary">Mark as read</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </li>
+
+                                        }*@
                                 </ul>
 
                                 <hr />
 
                                 <div class="text-right">
-                                    <a href="#" class="view-more">View All</a>
+                                    <a href="@Url.Action("MyNotifications", "TicketNotifications")" class="view-more">View All</a>
                                 </div>
                             </div>
                         </div>
@@ -242,21 +208,34 @@
 
                 <span class="separator"></span>
 
-                <div id="userbox" class="userbox">
-                    <a href="#" data-toggle="dropdown">
-                        <figure class="profile-picture">
-                            @if (user.AvatarUrl != null)
-                            {
-                                <img src="@user.AvatarUrl" alt="@user.FullName" class="img-circle" data-lock-picture="@user.AvatarUrl" />
-                            }
-                        </figure>
-                        <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
-                            <span class="name">@user.FullName</span>
-                            <span class="role">administrator</span>
-                        </div>
+                @{
+                    ApplicationUser user = null;
+                    var userId = User.Identity.GetUserId();
+                    var db = new ApplicationDbContext();
+                    if (!string.IsNullOrEmpty(userId))
+                    {
+                        user = db.Users.Find(userId);
+                    }
+                }
 
-                        <i class="fa custom-caret"></i>
-                    </a>
+                <div id="userbox" class="userbox">
+
+                    @if (user != null && user.AvatarUrl != null)
+                    {
+                        <a href="#" data-toggle="dropdown">
+
+
+                            <figure class="profile-picture">
+                                <img src="@user.AvatarUrl" alt="@user.FullName" class="img-circle" data-lock-picture="@user.AvatarUrl" />
+                            </figure>
+                            <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@JSOFT.com">
+                                <span class="name">@user.FullName</span>
+                                <span class="role"></span>
+                            </div>
+                            <i class="fa custom-caret"></i>
+                        </a>
+
+                    }
 
                     <div class="dropdown-menu">
                         <ul class="list-unstyled">
@@ -295,6 +274,7 @@
                     <div class="nano-content">
                         <nav id="menu" class="nav-main" role="navigation">
                             <ul class="nav nav-main">
+
                                 <li class="nav-active">
                                     <a href="@Url.Action("Dashboard", "Home")">
                                         <i class="fa fa-home" aria-hidden="true"></i>
@@ -302,71 +282,169 @@
                                     </a>
                                 </li>
 
-                                <li class="nav-parent">
-                                    <a>
-                                        <i class="fa fa-users" aria-hidden="true"></i>
-                                        <span>User Administration</span>
-                                    </a>
-                                    <ul class="nav nav-children">
-                                        <li>
-                                            <a href="@Url.Action("UserIndex", "Admin")">
-                                                <i class="fa fa-user" aria-hidden="true"></i>
-                                                User Index
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("ManageUsers", "Admin")">
-                                                <i class="fa fa-user" aria-hidden="true"></i>
-                                                Manage Users
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("ManageRoles", "Admin")">
-                                                <i class="fa fa-user" aria-hidden="true"></i>
-                                                Manage User Roles
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("ManageProjects", "Admin")">
-                                                <i class="fa fa-ticket" aria-hidden="true"></i>
-                                                Manage User Projects
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-parent">
-                                    <a>
-                                        <i class="fa fa-align-left" aria-hidden="true"></i>
-                                        <span>Menu Levels</span>
-                                    </a>
-                                    <ul class="nav nav-children">
-                                        <li>
-                                            <a>First Level</a>
-                                        </li>
+                                @if (navHelper.UserCanAddTickets())
+                                {
+                                    <li class="nav-active">
+                                        <a href="@Url.Action("Create", "Tickets")">
+                                            <i class="fa fa-ticket" aria-hidden="true"></i>
+                                            <span>Create New Ticket</span>
+                                        </a>
+                                    </li>
+                                }
+
+
+
+
+
+                                @*Viewing Project links based on role*@
+                                @*<li class="nav-parent">
+                                        <a>
+                                            <i class="fa fa-users" aria-hidden="true"></i>
+                                            <span>All Projects</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            @foreach (var miniProject in db.Projects.Select(p => new { ProjectId = p.Id, Name = p.Name }).ToList())
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Details", "Projects", new { id = miniProject.ProjectId })">
+                                                        <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                        @miniProject.Name
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>*@
+
+                                @*@if (User.IsInRole("ProjectManager") || User.IsInRole("Developer") || User.IsInRole("Submitter"))
+                                    {
                                         <li class="nav-parent">
-                                            <a>Second Level</a>
+                                            <a>
+                                                <i class="fa fa-users" aria-hidden="true"></i>
+                                                <span>My Projects</span>
+                                            </a>
                                             <ul class="nav nav-children">
-                                                <li class="nav-parent">
-                                                    <a>Third Level</a>
-                                                    <ul class="nav nav-children">
-                                                        <li>
-                                                            <a>Third Level Link #1</a>
-                                                        </li>
-                                                        <li>
-                                                            <a>Third Level Link #2</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li>
-                                                    <a>Second Level Link #1</a>
-                                                </li>
-                                                <li>
-                                                    <a>Second Level Link #2</a>
-                                                </li>
+                                                @foreach (var miniProject in user.Projects.Select(p => new { ProjectId = p.Id, Name = p.Name }).ToList())
+                                                {
+                                                    <li>
+                                                        <a href="@Url.Action("Details", "Projects", new { id = miniProject.ProjectId })">
+                                                            <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                            @miniProject.Name
+                                                        </a>
+                                                    </li>
+                                                }
                                             </ul>
                                         </li>
-                                    </ul>
-                                </li>
+                                    }*@
+
+
+                                @*Viewing Tickets links based on role*@
+                                @*<li class="nav-active">
+                                        <a href="@Url.Action("Index", "Tickets")">
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                            <span>Ticket Index</span>
+                                        </a>
+                                    </li>*@
+                                @*<li class="nav-parent">
+                                        <a>
+                                            <i class="fa fa-users" aria-hidden="true"></i>
+                                            <span>All Tickets</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            @foreach (var miniTicket in db.Tickets.Select(p => new { TicketId = p.Id, Title = p.Title }).ToList())
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("Dashboard", "Tickets", new { id = miniTicket.TicketId })">
+                                                        <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                        @miniTicket.Title
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-parent">
+                                        <a>
+                                            <i class="fa fa-users" aria-hidden="true"></i>
+                                            <span>Notifications</span>
+                                        </a>
+                                        <ul class="nav nav-children">
+                                            <li>
+                                                <a href="@Url.Action("Index", "TicketNotifications")">
+                                                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                    All Notifications
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("MyNotifications", "TicketNotifications")">
+                                                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                    My Notifications
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("DeleteAll", "TicketNotifications")">
+                                                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                                                    Delete All Notifications
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>*@
+
+                                @*Admin specific links*@
+                                @*@if (User.IsInRole("Admin"))
+                                    {
+                                        <li class="nav-active">
+                                            <a href="@Url.Action("ManageRoles", "Admin")">
+                                                <i class="fa fa-home" aria-hidden="true"></i>
+                                                <span>Manage User Roles</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-active">
+                                            <a href="@Url.Action("Index", "TicketPriorities")">
+                                                <i class="fa fa-home" aria-hidden="true"></i>
+                                                <span>Manage Ticket Priorities</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-active">
+                                            <a href="@Url.Action("Index", "TicketStatus")">
+                                                <i class="fa fa-home" aria-hidden="true"></i>
+                                                <span>Manage Ticket Statuses</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-active">
+                                            <a href="@Url.Action("Index", "TicketTypes")">
+                                                <i class="fa fa-home" aria-hidden="true"></i>
+                                                <span>Manage Ticket Types</span>
+                                            </a>
+                                        </li>
+
+                                    }*@
+
+                                @*Submitter specific links*@
+                                @*@if (User.IsInRole("Submitter"))
+                                    {
+                                        <li class="nav-active">
+                                            <a id="lnkSweet">
+                                                <i class="fa fa-home" aria-hidden="true"></i>
+                                                <span>Create Ticket</span>
+                                            </a>
+                                        </li>*@
+
+
+
+
+
+                                }
+
+
+                                @*<li class="nav-active">
+                                        <a href="@Url.Action("Index", "TicketHistories")">
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                            <span>All Histories</span>
+                                        </a>
+                                    </li>*@
                             </ul>
                         </nav>
                     </div>
@@ -374,7 +452,7 @@
             </aside>
 
             <!-- end: sidebar -->
-            <section role="main" class="content-body">
+            <section role="main" id="customBackground" class="content-body">
                 @RenderBody()
             </section>
         </div>
@@ -483,6 +561,10 @@
     <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.north-america.js"></script>
     <script src="~/assets/vendor/jqvmap/maps/continents/jquery.vmap.south-america.js"></script>
 
+
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+
+
     <!-- Theme Base, Components and Settings -->
     <script src="~/assets/javascripts/theme.js"></script>
 
@@ -495,6 +577,43 @@
     <!-- Examples -->
     <script src="~/assets/javascripts/dashboard/examples.dashboard.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+
+    <script>
+        //$(".tblTarget").DataTable();
+        $(".searchTbl").DataTable();
+    </script>
+
+    <script>
+
+        $("#lnkSweet").click(function () {
+            AddTicket();
+        });
+
+        async function AddTicket() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Multiple inputs',
+                html:
+                    '<input id="swal-input1" class="swal2-input">' +
+                    '<input id="swal-input2" class="swal2-input">',
+                focusConfirm: false,
+                preConfirm: () => {
+                    return [
+                        document.getElementById('swal-input1').value,
+                        document.getElementById('swal-input2').value
+                    ]
+                }
+            })
+            if (formValues) {
+                Swal.fire(JSON.stringify(formValues))
+            }
+        }
+    </script>
+
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

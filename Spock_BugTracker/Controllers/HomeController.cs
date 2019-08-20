@@ -3,6 +3,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         //Use this as my main landing page and allow user to Login
@@ -19,6 +20,11 @@ namespace Spock_BugTracker.Controllers
 
         [Authorize]
         public ActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public ActionResult DemoUser()
         {
             return View();
         }

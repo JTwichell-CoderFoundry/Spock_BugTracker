@@ -1,4 +1,5 @@
-﻿using Spock_BugTracker.Models;
+﻿using Microsoft.AspNet.Identity;
+using Spock_BugTracker.Models;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -6,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Spock_BugTracker.Controllers
 {
+    [RequireHttps]
     public class TicketNotificationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -16,6 +18,40 @@ namespace Spock_BugTracker.Controllers
             var ticketNotifications = db.TicketNotifications.Include(t => t.Recipient).Include(t => t.Sender).Include(t => t.Ticket);
             return View(ticketNotifications.ToList());
         }
+
+        [Authorize]
+        public ActionResult DeleteAll()
+        {
+            foreach (var notification in db.TicketNotifications)
+            {
+                db.TicketNotifications.Remove(notification);
+            }
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult MyNotifications()
+        {
+            var userId = User.Identity.GetUserId();
+            return View("Index", db.TicketNotifications.Where(t => t.RecipientId == userId).ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MarkAsRead(int id)
+        {
+            var notification = db.TicketNotifications.Find(id);
+            notification.Read = true;
+            db.SaveChanges();
+
+            return RedirectToAction("Dashboard", "Home");
+        }
+
+
+
+
+
 
         // GET: TicketNotifications/Details/5
         public ActionResult Details(int? id)

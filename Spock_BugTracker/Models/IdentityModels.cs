@@ -82,5 +82,5 @@ namespace Spock_BugTracker.Models
         public DbSet<TicketStatus> TicketStatuses { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
 
-    }
+       }
 }
